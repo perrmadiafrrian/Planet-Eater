@@ -20,10 +20,10 @@ public class Player : MonoBehaviour {
 			camera = Camera.main.transform;
 		}
 
-		canvas = GameObject.Find ("Canvas").transform;
-		if (canvas == null) {
-			Debug.LogError ("Canvas not found");
-		} 
+		//canvas = GameObject.Find ("Canvas").transform;
+		//if (canvas == null) {
+		//	Debug.LogError ("Canvas not found");
+		//} 
 	}
 
 	void Update () {
