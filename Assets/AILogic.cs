@@ -16,11 +16,11 @@ public class AILogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!chasingOther) {
-			SearchPlanet(transform.position, rad * .2f);
+			StartCoroutine(SearchPlanet(transform.position, rad * .2f));
 		}
 	}
 
-	void SearchPlanet(Vector3 center, float radius) {
+	IEnumerator SearchPlanet(Vector3 center, float radius) {
 		Collider[] hitColliders = Physics.OverlapSphere (center, radius, planetMask);
 		int i = 0;
 		bool found = false;
@@ -32,12 +32,30 @@ public class AILogic : MonoBehaviour {
 				StartCoroutine (Chasing (hitColliders [i].gameObject));
 				rad = transform.localScale.x;
 			}
+			yield return null;
 		}
 	}
 
 	//SABTU 20 AGUSTUS 2016
 	IEnumerator Chasing(GameObject target) {
 		chasingOther = true;
-		yield return null;
+		while (Vector3.Distance(transform.position, target.transform.position) > (getPlanetSize() / 2.5f)) {
+			transform.position = Vector3.MoveTowards (transform.position, target.transform.position, Time.deltaTime * getMoveSpd ());
+			yield return null;
+		}
+	}
+
+	private float movingSpd;
+	private float planetSize;
+
+	public float getMoveSpd() {
+		float sz = transform.localScale.x;
+		movingSpd = 50f / (sz - (sz/2));
+		return movingSpd;
+	}
+
+	public float getPlanetSize() {
+		planetSize = transform.localScale.x;
+		return planetSize;
 	}
 }
