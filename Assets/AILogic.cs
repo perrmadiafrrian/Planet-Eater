@@ -6,6 +6,7 @@ public class AILogic : MonoBehaviour {
 	private bool chasingOther;
 	private float rad;
 	public LayerMask planetMask;
+	public Planet p;
 
 	// Use this for initialization
 	void Start () {
@@ -16,7 +17,7 @@ public class AILogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!chasingOther) {
-			StartCoroutine(SearchPlanet(transform.position, rad * .2f));
+			StartCoroutine(SearchPlanet(transform.position, rad * 1.1f));
 		}
 	}
 
@@ -38,23 +39,15 @@ public class AILogic : MonoBehaviour {
 
 	IEnumerator Chasing(GameObject target) {
 		chasingOther = true;
-		while (Vector3.Distance(transform.position, target.transform.position) > (getPlanetSize() / 2.5f)) {
-			transform.position = Vector3.MoveTowards (transform.position, target.transform.position, Time.deltaTime * getMoveSpd ());
+		bool stopChasing = false;
+		while (Vector3.Distance(transform.position, target.transform.position) > (p.getPlanetSize() / 2.5f) && !stopChasing && target != null) {
+			transform.position = Vector3.MoveTowards (transform.position, target.transform.position, Time.deltaTime * p.getMoveSpd ());
+			if (Vector3.Distance (transform.position, target.transform.position) > (p.getPlanetSize () / 2f)) {
+				stopChasing = true;
+				p.Eat (target);
+			}
 			yield return null;
 		}
-	}
-
-	private float movingSpd;
-	private float planetSize;
-
-	public float getMoveSpd() {
-		float sz = transform.localScale.x;
-		movingSpd = 50f / (sz - (sz/2));
-		return movingSpd;
-	}
-
-	public float getPlanetSize() {
-		planetSize = transform.localScale.x;
-		return planetSize;
+		chasingOther = false;
 	}
 }
