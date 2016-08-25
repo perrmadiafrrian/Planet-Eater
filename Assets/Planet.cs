@@ -6,9 +6,11 @@ public class Planet : MonoBehaviour {
 	private float movingSpd;
 	private float planetSize;
 
+	void Awake() {
+		movingSpd = 5f * ((100f - transform.localScale.x) / 100f);
+	}
+
 	public float getMoveSpd() {
-		float sz = transform.localScale.x;
-		movingSpd = 5f * ((100f - sz) / 100f);
 		return movingSpd;
 	}
 
@@ -18,13 +20,25 @@ public class Planet : MonoBehaviour {
 	}
 
 	public void Eat(GameObject target) {
-		transform.localScale = transform.localScale + (target.transform.localScale / 4);
+		StartCoroutine(GrowAnim(getPlanetSize() + (target.transform.localScale.x / 4f)));
+		movingSpd = 5f * ((100f - transform.localScale.x) / 100f);
 		Destroy (target);
 	}
 
 	void OnCollisionEnter(Collision target) {
 		if (target.transform.localScale.x < transform.localScale.x * .75f) {
 			Eat (target.gameObject);
+		}
+	}
+
+	IEnumerator GrowAnim(float size) {
+		float t = 0f;
+		float s = transform.localScale.x;
+		while (t < .5f) {
+			t = t + Time.deltaTime;
+			s = Mathf.Lerp (s, size, t * 2f);
+			transform.localScale = new Vector3 (s, s, s);
+			yield return null;
 		}
 	}
 }
