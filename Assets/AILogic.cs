@@ -36,7 +36,6 @@ public class AILogic : MonoBehaviour {
 		}
 	}
 
-	//SABTU 20 AGUSTUS 2016
 	IEnumerator Chasing(GameObject target) {
 		chasingOther = true;
 		while (Vector3.Distance(transform.position, target.transform.position) > (getPlanetSize() / 2.5f)) {
