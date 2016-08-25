@@ -39,8 +39,8 @@ public class Player : Planet {
 		transform.position = Vector3.MoveTowards (transform.position, targetLocation, Time.deltaTime * speed * speedModifier);
 
 		// Camera Target Location with offset (behind the player)
-		Vector3 cameraTarget = transform.position - Vector3.ClampMagnitude ((targetLocation - transform.position), Mathf.Abs(cameraOffset.z));
-		cameraTarget.y = cameraOffset.y;
+		Vector3 cameraTarget = transform.position - Vector3.ClampMagnitude ((targetLocation - transform.position), Mathf.Abs(cameraOffset.z*transform.localScale.x));
+		cameraTarget.y = cameraOffset.y*transform.localScale.x;
 		camera.parent.position = Vector3.MoveTowards (camera.parent.position, cameraTarget, speed * speedModifier * 1.1f * Time.deltaTime);
 	}
 
