@@ -19,6 +19,7 @@ public class AILogic : MonoBehaviour {
 		if (!chasingOther) {
 			StartCoroutine(SearchPlanet(transform.position, rad * 1.1f));
 		}
+		transform.position = Vector3.MoveTowards(transform.position, transform.forward, Time.deltaTime * 2f);
 	}
 
 	IEnumerator SearchPlanet(Vector3 center, float radius) {
@@ -40,14 +41,18 @@ public class AILogic : MonoBehaviour {
 	IEnumerator Chasing(GameObject target) {
 		chasingOther = true;
 		bool stopChasing = false;
+		bool eatIt = false;
 		while (Vector3.Distance(transform.position, target.transform.position) > (p.getPlanetSize() / 2.5f) && !stopChasing && target != null) {
-			transform.position = Vector3.MoveTowards (transform.position, target.transform.position, Time.deltaTime * p.getMoveSpd ());
+			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards (transform.forward, target.transform.position, 1f, 0f));
+			yield return null;
 			if (Vector3.Distance (transform.position, target.transform.position) > (p.getPlanetSize () / 2f)) {
 				stopChasing = true;
-				p.Eat (target);
+				eatIt = true;
 			}
-			yield return null;
 		}
+		if (eatIt)
+			p.Eat (target);
 		chasingOther = false;
+		yield return null;
 	}
 }
