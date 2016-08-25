@@ -2,10 +2,10 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+public class Player : Planet {
 	public Vector3 cameraOffset = new Vector3(0,2f,-3f);
-	public float speed = 2f;
 
+	private float speed;
 	private Ray ray;
 	private RaycastHit hit;
 	private float speedModifier = 1f;
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour {
 		} else {
 			camera = Camera.main.transform;
 		}
+		speed = getMoveSpd ();
 
 		//canvas = GameObject.Find ("Canvas").transform;
 		//if (canvas == null) {
@@ -33,6 +34,7 @@ public class Player : MonoBehaviour {
 
 	void Move(Vector3 targetLocation) {
 		// Player Movement
+		speed = getMoveSpd();
 		targetLocation.y = 0f;
 		transform.position = Vector3.MoveTowards (transform.position, targetLocation, Time.deltaTime * speed * speedModifier);
 
