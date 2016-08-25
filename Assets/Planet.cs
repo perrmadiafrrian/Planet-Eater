@@ -18,7 +18,7 @@ public class Planet : MonoBehaviour {
 	}
 
 	public void Eat(GameObject target) {
-		transform.localScale = transform.localScale + (target.transform.localScale / 2);
+		transform.localScale = transform.localScale + (target.transform.localScale / 4);
 		Destroy (target);
 	}
 
