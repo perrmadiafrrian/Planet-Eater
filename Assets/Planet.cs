@@ -21,4 +21,10 @@ public class Planet : MonoBehaviour {
 		transform.localScale = transform.localScale + (target.transform.localScale / 2);
 		Destroy (target);
 	}
+
+	void OnCollisionEnter(Collision target) {
+		if (target.transform.localScale.x < transform.localScale.x * .75f) {
+			Eat (target.gameObject);
+		}
+	}
 }
