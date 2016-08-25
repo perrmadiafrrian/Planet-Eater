@@ -30,7 +30,6 @@ public class AILogic : MonoBehaviour {
 		while (i < hitColliders.Length && !found) {
 			if (hitColliders [i].transform.localScale.x < transform.localScale.x * .75f) {
 				found = true;
-				Debug.Log ("Chasing");
 				StartCoroutine (Chasing (hitColliders [i].gameObject));
 				rad = transform.localScale.x;
 			}
@@ -42,12 +41,11 @@ public class AILogic : MonoBehaviour {
 		chasingOther = true;
 		bool stopChasing = false;
 		bool eatIt = false;
-		while (Vector3.Distance(transform.position, target.transform.position) > 1f && !stopChasing && target != null) {
+		while (target != null && Vector3.Distance(transform.position, target.transform.position) > 1f && !stopChasing) {
 			transform.LookAt (target.transform);
 			yield return null;
 			if (Vector3.Distance (transform.position, target.transform.position) < (p.getPlanetSize() * .5f)) {
 				stopChasing = true;
-				Debug.Log ("EAT");
 				eatIt = true;
 			}
 		}
@@ -58,7 +56,7 @@ public class AILogic : MonoBehaviour {
 	}
 
 	void OnDrawGizmos() {
-		Gizmos.color = Color.blue;
+		Gizmos.color = new Color(0f, 0f, 1f, .3f);
 		Gizmos.DrawSphere (transform.position, rad);
 	}
 }

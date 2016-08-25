@@ -8,6 +8,8 @@ public class Spawner : MonoBehaviour {
 	public int maxAsteroids = 100;
 	public int maxPlanets = 20;
 
+	public GameObject planetPrefab;
+
 	public Material defaultMaterial;
 
 	void Start () {
@@ -36,9 +38,7 @@ public class Spawner : MonoBehaviour {
 			GameObject g = GameObject.CreatePrimitive (PrimitiveType.Cube);
 			g.name = "asteroid";
 			g.tag = "Enemy";
-			g.layer = 10; // Planet Layer
-			//g.AddComponent<Planet> ();
-			//g.AddComponent<OrbitingObject> ().speed = 50f;
+			g.layer = 8; // Planet Layer
 			g.GetComponent<Renderer> ().material = defaultMaterial;
 			g.transform.SetParent (asteroids);
 			g.transform.Rotate (new Vector3 (Random.Range(0,180),Random.Range(0,180),Random.Range(0,180)));
@@ -57,25 +57,12 @@ public class Spawner : MonoBehaviour {
 		if (planets.childCount <= maxPlanets) {
 			yield return new WaitForSeconds (0.1f);
 
-			GameObject g = GameObject.CreatePrimitive (PrimitiveType.Sphere);
-			//g.AddComponent<Enemy> ();
-			//g.AddComponent<AI> ();
-
-			if (defaultMaterial != null) {
-				g.GetComponent<Renderer> ().material = defaultMaterial;
-			}
-
-			Rigidbody b = g.AddComponent<Rigidbody> ();
-			b.useGravity = false;
-
-			g.name = "planet";
-			g.tag = "Enemy";
-			g.layer = 10; // Planet Layer
+			GameObject g = Instantiate (planetPrefab);
 
 			g.transform.SetParent (planets);
 			g.transform.position = Vector3.ClampMagnitude (new Vector3 (Random.Range (spawnRadius / 2f, -spawnRadius / 2f), 0f, Random.Range (spawnRadius / 2f, -spawnRadius / 2f)), spawnRadius / 2f);
-
-			g.transform.localScale = new Vector3 (2f,2f,2f);
+			float rand = Random.Range (1f,5f);
+			g.transform.localScale = new Vector3 (rand,rand,rand);
 
 			StartCoroutine (SpawnPlanet ());
 		} else {
