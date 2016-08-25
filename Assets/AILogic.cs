@@ -19,7 +19,7 @@ public class AILogic : MonoBehaviour {
 		if (!chasingOther) {
 			StartCoroutine(SearchPlanet(transform.position, rad * 1.1f));
 		}
-		transform.position = Vector3.MoveTowards(transform.position, transform.forward, Time.deltaTime * 2f);
+		transform.Translate (transform.forward * Time.deltaTime * p.getMoveSpd());
 	}
 
 	IEnumerator SearchPlanet(Vector3 center, float radius) {
@@ -42,11 +42,12 @@ public class AILogic : MonoBehaviour {
 		chasingOther = true;
 		bool stopChasing = false;
 		bool eatIt = false;
-		while (Vector3.Distance(transform.position, target.transform.position) > (p.getPlanetSize() / 2.5f) && !stopChasing && target != null) {
-			transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards (transform.forward, target.transform.position, 1f, 0f));
+		while (Vector3.Distance(transform.position, target.transform.position) > 1f && !stopChasing && target != null) {
+			transform.LookAt (target.transform);
 			yield return null;
-			if (Vector3.Distance (transform.position, target.transform.position) > (p.getPlanetSize () / 2f)) {
+			if (Vector3.Distance (transform.position, target.transform.position) < (p.getPlanetSize() * .5f)) {
 				stopChasing = true;
+				Debug.Log ("EAT");
 				eatIt = true;
 			}
 		}
@@ -54,5 +55,10 @@ public class AILogic : MonoBehaviour {
 			p.Eat (target);
 		chasingOther = false;
 		yield return null;
+	}
+
+	void OnDrawGizmos() {
+		Gizmos.color = Color.blue;
+		Gizmos.DrawSphere (transform.position, rad);
 	}
 }
