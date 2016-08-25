@@ -9,7 +9,6 @@ public class Planet : MonoBehaviour {
 	public float getMoveSpd() {
 		float sz = transform.localScale.x;
 		movingSpd = 5f * ((100f - sz) / 100f);
-		Debug.Log (movingSpd);
 		return movingSpd;
 	}
 

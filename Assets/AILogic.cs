@@ -28,7 +28,7 @@ public class AILogic : MonoBehaviour {
 		bool found = false;
 		rad = radius;
 		while (i < hitColliders.Length && !found) {
-			if (hitColliders [i].transform.localScale.x < transform.localScale.x * .75f) {
+			if (hitColliders[i] != null && hitColliders [i].transform.localScale.x < transform.localScale.x * .75f) {
 				found = true;
 				StartCoroutine (Chasing (hitColliders [i].gameObject));
 				rad = transform.localScale.x;
@@ -44,7 +44,7 @@ public class AILogic : MonoBehaviour {
 		while (target != null && Vector3.Distance(transform.position, target.transform.position) > 1f && !stopChasing) {
 			transform.LookAt (target.transform);
 			yield return null;
-			if (Vector3.Distance (transform.position, target.transform.position) < (p.getPlanetSize() * .5f)) {
+			if (target != null && Vector3.Distance (transform.position, target.transform.position) < (p.getPlanetSize() * .5f)) {
 				stopChasing = true;
 				eatIt = true;
 			}

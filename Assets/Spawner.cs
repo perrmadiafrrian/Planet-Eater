@@ -37,8 +37,7 @@ public class Spawner : MonoBehaviour {
 
 			GameObject g = GameObject.CreatePrimitive (PrimitiveType.Cube);
 			g.name = "asteroid";
-			g.tag = "Enemy";
-			g.layer = 8; // Planet Layer
+			g.layer = 8;
 			g.GetComponent<Renderer> ().material = defaultMaterial;
 			g.transform.SetParent (asteroids);
 			g.transform.Rotate (new Vector3 (Random.Range(0,180),Random.Range(0,180),Random.Range(0,180)));
