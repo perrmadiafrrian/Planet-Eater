@@ -36,8 +36,8 @@ public class Planet : MonoBehaviour {
 		float s = transform.localScale.x;
 		while (t < .5f) {
 			t = t + Time.deltaTime;
-			s = Mathf.Lerp (s, size, t * 2f);
-			transform.localScale = new Vector3 (s, s, s);
+			float n = Mathf.Lerp (s, size, t * 2f);
+			transform.localScale = new Vector3 (n, n, n);
 			yield return null;
 		}
 	}
