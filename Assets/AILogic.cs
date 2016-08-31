@@ -8,7 +8,6 @@ public class AILogic : MonoBehaviour {
 	private bool running;
 	private bool foundNewTarget;
 	private GameObject closest;
-	private float LookModifier;
 	private bool searchNew;
 
 	public LayerMask planetMask;
@@ -16,7 +15,6 @@ public class AILogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		LookModifier = 1f;
 		chasingOther = false;
 		running = false;
 		foundNewTarget = false;
@@ -30,7 +28,7 @@ public class AILogic : MonoBehaviour {
 			foundNewTarget = false;
 			StartCoroutine(SearchPlanet(transform.position, rad * 1.1f));
 		}
-		transform.position = Vector3.MoveTowards (transform.position,transform.position + (transform.forward * LookModifier), Time.deltaTime * p.getMoveSpd());
+		transform.position = Vector3.MoveTowards (transform.position,transform.position + transform.forward, Time.deltaTime * p.getMoveSpd());
 	}
 
 	IEnumerator SearchPlanet(Vector3 center, float radius) {
@@ -39,9 +37,9 @@ public class AILogic : MonoBehaviour {
 		bool found = false;
 		rad = radius;
 		while (i < hitColliders.Length && !found) {
-			if (closest == null) {
+			if (hitColliders[i] != null && closest == null && hitColliders[i].transform != transform) {
 				closest = hitColliders [i].gameObject;
-			} else if (hitColliders[i] != null && Vector3.Distance (transform.position, closest.transform.position) > Vector3.Distance (transform.position, hitColliders [i].transform.position)) {
+			} else if (hitColliders[i] != null && closest != null && hitColliders[i].transform != transform && Vector3.Distance (transform.position, closest.transform.position) > Vector3.Distance (transform.position, hitColliders [i].transform.position)) {
 				closest = hitColliders [i].gameObject;
 			}
 			if (hitColliders [i] != null && hitColliders [i].transform.localScale.x < transform.localScale.x * .75f) {
@@ -59,8 +57,6 @@ public class AILogic : MonoBehaviour {
 
 	IEnumerator Chasing(GameObject target) {
 		chasingOther = true;
-		Debug.Log ("chase");
-		Debug.Log (target.name);
 		bool stopChasing = false;
 		while (target != null && !foundNewTarget && Vector3.Distance(transform.position, target.transform.position) > 1f && !stopChasing) {
 			Quaternion tar = Quaternion.LookRotation (target.transform.position - transform.position);
@@ -70,7 +66,6 @@ public class AILogic : MonoBehaviour {
 				stopChasing = true;
 			yield return null;
 		}
-		Debug.Log ("asdf");
 		chasingOther = false;
 		yield return null;
 	}
@@ -84,7 +79,6 @@ public class AILogic : MonoBehaviour {
 			yield return new WaitForSeconds (3f);
 		else
 			yield return null;
-		LookModifier = 1f;
 		running = false;
 	}
 
@@ -95,14 +89,16 @@ public class AILogic : MonoBehaviour {
 		bool found = false;
 		rad = radius;
 		while (i < hitColliders.Length && !found) {
-			if (closest == null && hitColliders[i] != null) {
+			if (closest == null && hitColliders[i] != null && hitColliders[i].transform != transform) {
 				closest = hitColliders [i].gameObject;
-			} else if (hitColliders [i] != null && Vector3.Distance (transform.position, closest.transform.position) > Vector3.Distance (transform.position, hitColliders [i].transform.position)) {
+				found = true;
+			} else if (hitColliders [i] != null && closest != null && hitColliders[i].transform != transform && Vector3.Distance (transform.position, closest.transform.position) > Vector3.Distance (transform.position, hitColliders [i].transform.position)) {
 				closest = hitColliders [i].gameObject;
 				foundNewTarget = true;
-				Debug.Log ("true");
+				found = true;
 			}
 			yield return null;
+			i++;
 		}
 		searchNew = false;
 	}
