@@ -30,7 +30,7 @@ public class AILogic : MonoBehaviour {
 			foundNewTarget = false;
 			StartCoroutine(SearchPlanet(transform.position, rad * 1.1f));
 		}
-		transform.Translate (transform.forward * Time.deltaTime * p.getMoveSpd() * LookModifier);
+		transform.position = Vector3.MoveTowards (transform.position,transform.position + (transform.forward * LookModifier), Time.deltaTime * p.getMoveSpd());
 	}
 
 	IEnumerator SearchPlanet(Vector3 center, float radius) {
@@ -63,22 +63,22 @@ public class AILogic : MonoBehaviour {
 		Debug.Log (target.name);
 		bool stopChasing = false;
 		while (target != null && !foundNewTarget && Vector3.Distance(transform.position, target.transform.position) > 1f && !stopChasing) {
-			transform.LookAt (target.transform);
-			Debug.Log ("Lookat");
+			Quaternion tar = Quaternion.LookRotation (target.transform.position - transform.position);
+			transform.rotation = Quaternion.Lerp (transform.rotation, tar, 1f);
 			StartCoroutine (CheckClosestEnemies (transform.position, Vector3.Distance(target.transform.position, transform.position)));
 			if (target.transform.localScale.x > transform.localScale.x)
 				stopChasing = true;
 			yield return null;
 		}
+		Debug.Log ("asdf");
 		chasingOther = false;
 		yield return null;
 	}
 
 	IEnumerator Running(GameObject target) {
 		running = true;
-		Debug.Log ("running");
-		LookModifier = -1f;
-		transform.LookAt (target.transform);
+		Quaternion tar = Quaternion.LookRotation (transform.position - target.transform.position);
+		transform.rotation = Quaternion.Lerp (transform.rotation, tar, 1f);
 		StartCoroutine (CheckClosestEnemies (transform.position, Vector3.Distance(target.transform.position, transform.position)));
 		if (!foundNewTarget)
 			yield return new WaitForSeconds (3f);
@@ -100,6 +100,7 @@ public class AILogic : MonoBehaviour {
 			} else if (hitColliders [i] != null && Vector3.Distance (transform.position, closest.transform.position) > Vector3.Distance (transform.position, hitColliders [i].transform.position)) {
 				closest = hitColliders [i].gameObject;
 				foundNewTarget = true;
+				Debug.Log ("true");
 			}
 			yield return null;
 		}
@@ -110,7 +111,7 @@ public class AILogic : MonoBehaviour {
 		if (searchNew)
 			Gizmos.color = new Color (0f, 0f, 1f, .3f);
 		else
-			Gizmos.color = new Color (0f, 1f, .1f, .2f);
+			Gizmos.color = new Color (0f, 1f, 0f, .2f);
 
 		Gizmos.DrawSphere (transform.position, rad);
 	}
