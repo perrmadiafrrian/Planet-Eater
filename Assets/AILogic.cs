@@ -59,9 +59,12 @@ public class AILogic : MonoBehaviour {
 
 	IEnumerator Chasing(GameObject target) {
 		chasingOther = true;
+		Debug.Log ("chase");
+		Debug.Log (target.name);
 		bool stopChasing = false;
 		while (target != null && !foundNewTarget && Vector3.Distance(transform.position, target.transform.position) > 1f && !stopChasing) {
 			transform.LookAt (target.transform);
+			Debug.Log ("Lookat");
 			StartCoroutine (CheckClosestEnemies (transform.position, Vector3.Distance(target.transform.position, transform.position)));
 			if (target.transform.localScale.x > transform.localScale.x)
 				stopChasing = true;
@@ -73,6 +76,7 @@ public class AILogic : MonoBehaviour {
 
 	IEnumerator Running(GameObject target) {
 		running = true;
+		Debug.Log ("running");
 		LookModifier = -1f;
 		transform.LookAt (target.transform);
 		StartCoroutine (CheckClosestEnemies (transform.position, Vector3.Distance(target.transform.position, transform.position)));
