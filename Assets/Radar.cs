@@ -46,7 +46,7 @@ public class Radar : MonoBehaviour {
 		float t = 0;
 		while (player!=null && enemy!=null && t < 1f/detectionRate) {
 			Quaternion rot = Quaternion.FromToRotation (Camera.main.transform.forward,enemy.position - player.position);
-			dangerSign.rotation = Quaternion.Euler (0f,0f,rot.eulerAngles.y*-1f);
+			dangerSign.rotation = Quaternion.Euler (transform.parent.rotation.eulerAngles.x,transform.parent.rotation.eulerAngles.y,rot.eulerAngles.y*-1f);
 			dangerSignImage.color = new Color (1f,1f,1f,1f - (Vector3.Distance(player.position,enemy.position)/(detectionRadius+player.localScale.x)));
 			t += Time.deltaTime;
 			yield return null;
