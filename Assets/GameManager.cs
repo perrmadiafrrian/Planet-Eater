@@ -20,4 +20,13 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	public void Restart() {
+		SceneManager.LoadSceneAsync (SceneManager.GetActiveScene ().name);
+	}
+
+	public void Home() {
+		AsyncOperation ao = SceneManager.LoadSceneAsync ("Menu");
+		ao.allowSceneActivation = true;
+	}
 }

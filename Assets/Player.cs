@@ -10,6 +10,8 @@ public class Player : Planet {
 	private RaycastHit hit;
 	private float speedModifier = 1f;
 
+	public GameManager gm;
+
 	new private Transform camera;
 	private Transform canvas;
 
@@ -20,7 +22,6 @@ public class Player : Planet {
 			camera = Camera.main.transform;
 		}
 		speed = getMoveSpd ();
-
 		//canvas = GameObject.Find ("Canvas").transform;
 		//if (canvas == null) {
 		//	Debug.LogError ("Canvas not found");
@@ -28,7 +29,6 @@ public class Player : Planet {
 	}
 
 	void Update () {
-		// Move forwards 100u from the camera. 
 		Move (camera.forward*100f + camera.position);
 	}
 
@@ -61,5 +61,9 @@ public class Player : Planet {
 	public void EndAction() {
 		speedModifier = 1f;
 		GameObject.Destroy (gui);
+	}
+
+	void OnDestroy() {
+		gm.Home ();
 	}
 }

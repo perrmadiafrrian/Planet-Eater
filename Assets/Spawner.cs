@@ -62,7 +62,8 @@ public class Spawner : MonoBehaviour {
 			g.transform.position = Vector3.ClampMagnitude (new Vector3 (Random.Range (spawnRadius / 2f, -spawnRadius / 2f), 0f, Random.Range (spawnRadius / 2f, -spawnRadius / 2f)), spawnRadius / 2f);
 			float rand = Random.Range (1f,5f);
 			g.transform.localScale = new Vector3 (rand,rand,rand);
-
+			g.GetComponent<MeshRenderer> ().materials [0].color = new Color (Random.Range (0f, 10f) / 10,
+				Random.Range (0f, 10f) / 10, Random.Range (0f, 10f) / 10f);
 			StartCoroutine (SpawnPlanet ());
 		} else {
 			yield return new WaitForSeconds (5f);
