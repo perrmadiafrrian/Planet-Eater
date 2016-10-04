@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Spawner : MonoBehaviour {
 
-	public float spawnRadius = 300f;
+	public float spawnRadius = 350f;
 
-	public int maxAsteroids = 100;
-	public int maxPlanets = 20;
+	public int maxAsteroids = 50;
+	public int maxPlanets = 10;
 
 	public GameObject planetPrefab;
 
@@ -33,9 +33,9 @@ public class Spawner : MonoBehaviour {
 
 	IEnumerator SpawnAsteroid() {
 		if (asteroids.childCount <= maxAsteroids) {
-			yield return new WaitForSeconds (0.1f);
+			yield return new WaitForSeconds (0.2f);
 
-			GameObject g = GameObject.CreatePrimitive (PrimitiveType.Cube);
+			GameObject g = GameObject.CreatePrimitive (PrimitiveType.Sphere);
 			g.name = "asteroid";
 			g.layer = 8;
 			g.GetComponent<Renderer> ().material = defaultMaterial;
@@ -43,6 +43,8 @@ public class Spawner : MonoBehaviour {
 			g.transform.Rotate (new Vector3 (Random.Range(0,180),Random.Range(0,180),Random.Range(0,180)));
 			float rand = Random.Range (0.7f,1.1f);
 			g.transform.localScale = new Vector3 (rand,rand,rand);
+			g.GetComponent<MeshRenderer>().materials[0].color = new Color(Random.Range (0f, 10f) / 10,
+				Random.Range (0f, 10f) / 10, Random.Range (0f, 10f) / 10f);
 			g.transform.position = Vector3.ClampMagnitude (new Vector3 (Random.Range (spawnRadius / 2f, -spawnRadius / 2f), 0f, Random.Range (spawnRadius / 2f, -spawnRadius / 2f)), spawnRadius / 2f);
 
 			StartCoroutine (SpawnAsteroid ());

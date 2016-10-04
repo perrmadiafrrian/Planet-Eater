@@ -61,7 +61,7 @@ public class AILogic : MonoBehaviour {
 		while (target != null && !foundNewTarget && Vector3.Distance(transform.position, target.transform.position) > 1f && !stopChasing) {
 			Quaternion tar = Quaternion.LookRotation (target.transform.position - transform.position);
 			transform.rotation = Quaternion.Lerp (transform.rotation, tar, 1f);
-			StartCoroutine (CheckClosestEnemies (transform.position, Vector3.Distance(target.transform.position, transform.position)));
+			CheckClosestEnemies (transform.position, Vector3.Distance(target.transform.position, transform.position));
 			if (target.transform.localScale.x > transform.localScale.x)
 				stopChasing = true;
 			yield return null;
@@ -74,7 +74,7 @@ public class AILogic : MonoBehaviour {
 		running = true;
 		Quaternion tar = Quaternion.LookRotation (transform.position - target.transform.position);
 		transform.rotation = Quaternion.Lerp (transform.rotation, tar, 1f);
-		StartCoroutine (CheckClosestEnemies (transform.position, Vector3.Distance(target.transform.position, transform.position)));
+		CheckClosestEnemies (transform.position, Vector3.Distance(target.transform.position, transform.position));
 		if (!foundNewTarget)
 			yield return new WaitForSeconds (3f);
 		else
@@ -82,7 +82,7 @@ public class AILogic : MonoBehaviour {
 		running = false;
 	}
 
-	IEnumerator CheckClosestEnemies(Vector3 center, float radius) {
+	void CheckClosestEnemies(Vector3 center, float radius) {
 		searchNew = true;
 		Collider[] hitColliders = Physics.OverlapSphere (center, radius, planetMask);
 		int i = 0;
@@ -97,7 +97,6 @@ public class AILogic : MonoBehaviour {
 				foundNewTarget = true;
 				found = true;
 			}
-			yield return null;
 			i++;
 		}
 		searchNew = false;

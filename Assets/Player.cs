@@ -10,6 +10,7 @@ public class Player : Planet {
 	private RaycastHit hit;
 	private float speedModifier = 1f;
 
+	public Canvas gameOver;
 	public GameManager gm;
 
 	new private Transform camera;
@@ -64,6 +65,6 @@ public class Player : Planet {
 	}
 
 	void OnDestroy() {
-		gm.Home ();
+		gameOver.gameObject.SetActive (true);
 	}
 }
