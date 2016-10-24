@@ -17,10 +17,6 @@ public class GameManager : MonoBehaviour {
 		ao.allowSceneActivation = true;
 	}
 
-	void Update () {
-	
-	}
-
 	public void Restart() {
 		SceneManager.LoadSceneAsync (SceneManager.GetActiveScene ().name);
 	}
